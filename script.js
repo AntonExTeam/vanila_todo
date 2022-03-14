@@ -3,33 +3,46 @@ let form = document.querySelector('form');
 let ul = document.querySelector('ul');
 let todoInput = document.getElementById('todo_text_input');
 
-let firstColor = document.getElementById('todo_color_1')
-let secondColor = document.getElementById('todo_color_2')
-let thirdColor = document.getElementById('todo_color_3')
-let fourthColor = document.getElementById('todo_color_4')
-let fifthColor = document.getElementById('todo_color_5')
-let sixthColor = document.getElementById('todo_color_6')
+let firstColor = document.getElementById('todo_color_1_selector')
+let secondColor = document.getElementById('todo_color_2_selector')
+let thirdColor = document.getElementById('todo_color_3_selector')
+let fourthColor = document.getElementById('todo_color_4_selector')
+let fifthColor = document.getElementById('todo_color_5_selector')
+let sixthColor = document.getElementById('todo_color_6_selector')
 
-let selectedColor = '#FFFFFF'
+colors = []
+colors.push({colorBox: firstColor, color: '#530cff'});
+colors.push({colorBox: secondColor, color: '#ffa400'});
+colors.push({colorBox: thirdColor, color: 'green'});
+colors.push({colorBox: fourthColor, color: 'red'});
+colors.push({colorBox: fifthColor, color: '#00d669'});
+colors.push({colorBox: sixthColor, color: 'blue'});
+
+let selectedColor;
 let selectedBox;
 
 function selectColor(color, colorBox) {
     return () => {
-        selectedColor = color
-        colorBox.style.border = '1px solid orange';
-        if (selectedBox) {
-            selectedBox.style.border = 'none'
+        if(colorBox !== selectedBox) {
+            selectedColor = color
+            colorBox.style.borderColor = 'orange';
+
+            if (selectedBox) {
+                selectedBox.style.borderColor = 'transparent'
+            }
+            selectedBox = colorBox;
         }
-        selectedBox = colorBox;
     }
 }
 
-firstColor.addEventListener('click', selectColor('#530cff', firstColor));
-secondColor.addEventListener('click', selectColor('#ffa400', secondColor));
-thirdColor.addEventListener('click', selectColor('green', thirdColor));
-fourthColor.addEventListener('click', selectColor('red', fourthColor));
-fifthColor.addEventListener('click', selectColor('#00d669', fifthColor));
-sixthColor.addEventListener('click', selectColor('blue', sixthColor));
+function arrayRandElement(arr) {
+    const rand = Math.floor(Math.random() * arr.length);
+    return arr[rand];
+}
+
+colors.forEach(({colorBox, color}) => {
+    colorBox.addEventListener('click', selectColor(color, colorBox))
+})
 
 function addTodo(todo) {
     const todoColor = selectedColor;
@@ -68,13 +81,20 @@ function addTodo(todo) {
     ul.appendChild(todoWrapper);
 }
 
+function setRandomColor() {
+    const {color, colorBox} = arrayRandElement(colors);
+    selectColor(color,colorBox)();
+}
+
 function handleSubmitForm(e) {
     e.preventDefault();
 
     if (todoInput.value != '')
         addTodo(todoInput.value);
     todoInput.value = '';
+    setRandomColor()
 }
 
 form.addEventListener('submit', handleSubmitForm);
+setRandomColor()
 

@@ -35,7 +35,11 @@ input[type="text"] {
     font-family: inherit;
     font-size: 1rem;
 }
+.selector {
+    padding: 1px;
+    border: 1px solid transparent;
 
+}
 .todo_colors {
     display: flex;
     justify-content: space-between;
